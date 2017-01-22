@@ -221,7 +221,7 @@ def Final_Regression (Y,Z,quantile,alpha,J): #Permet de faire la régression fin
     Asymptotic_CI = res.conf_int()
     ThetaRef = res.params
     #I=statsmodels.regression.linear_model.OLS(H[0],H[1]).hessian(ThetaRef)
-    I = np.diag((Asymptotic_CI[:, 1] - Asymptotic_CI[:, 0])/10)
+    I = np.diag((Asymptotic_CI[:, 1] - Asymptotic_CI[:, 0])/100)
     x = Z.shape
     Non_Asymptotic_CI = Non_Asymptotic_CF(ThetaRef, ThetaRef, quantile, alpha, Y, Z, I, J)  
     ModelTot = np.hstack((ThetaRef.reshape((-1,1)),Non_Asymptotic_CI,Asymptotic_CI))
@@ -237,3 +237,9 @@ def hyperpyramid_generator (n,d):
     Ones = np.ones(d)
     Y = Quantiles_Vec * np.dot(L, Ones)
     return(Y, L)
+
+if __name__ == "__main__":
+
+    H = hyperpyramid_generator(10000, 2)
+    Test1 = Final_Regression(H[0],H[1],0.50,0.95,5000)
+    print(Test1)
